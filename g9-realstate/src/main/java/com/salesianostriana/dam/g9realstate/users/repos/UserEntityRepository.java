@@ -1,6 +1,7 @@
-package com.salesianostriana.dam.realestate.users.repos;
+package com.salesianostriana.dam.g9realstate.users.repos;
 
-import com.salesianostriana.dam.realestate.users.model.UserEntity;
+import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

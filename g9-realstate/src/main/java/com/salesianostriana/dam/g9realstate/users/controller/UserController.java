@@ -1,15 +1,15 @@
-package com.salesianostriana.dam.realestate.users.controller;
+package com.salesianostriana.dam.g9realstate.users.controller;
 
-import com.salesianostriana.dam.realestate.users.dto.CreateUserDto;
-import com.salesianostriana.dam.realestate.users.dto.GetUserDto;
-import com.salesianostriana.dam.realestate.users.dto.UserDtoConverter;
-import com.salesianostriana.dam.realestate.users.model.UserEntity;
-import com.salesianostriana.dam.realestate.users.services.UserEntityService;
+
+import com.salesianostriana.dam.g9realstate.users.dto.CreateUserDto;
+import com.salesianostriana.dam.g9realstate.users.dto.GetUserDto;
+import com.salesianostriana.dam.g9realstate.users.dto.UserDtoConverter;
+import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
+import com.salesianostriana.dam.g9realstate.users.services.UserEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

@@ -1,10 +1,10 @@
-package com.salesianostriana.dam.realestate.users.services;
+package com.salesianostriana.dam.g9realstate.users.services;
 
-import com.salesianostriana.dam.realestate.services.base.BaseService;
-import com.salesianostriana.dam.realestate.users.dto.CreateUserDto;
-import com.salesianostriana.dam.realestate.users.model.UserEntity;
-import com.salesianostriana.dam.realestate.users.model.UserRole;
-import com.salesianostriana.dam.realestate.users.repos.UserEntityRepository;
+import com.salesianostriana.dam.g9realstate.service.base.BaseService;
+import com.salesianostriana.dam.g9realstate.users.dto.CreateUserDto;
+import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
+import com.salesianostriana.dam.g9realstate.users.model.UserRole;
+import com.salesianostriana.dam.g9realstate.users.repos.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
