@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.g9realstate.model;
 
+import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import lombok.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -35,6 +36,10 @@ public class Inmobiliaria implements Serializable {
 
     @OneToMany(mappedBy = "inmobiliaria")
     private List<Vivienda> viviendas =new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "inmobiliaria")
+    private List<UserEntity> userEntity = new ArrayList<>();
 
     public Inmobiliaria(String nombre, String email, String telefono) {
         this.nombre = nombre;

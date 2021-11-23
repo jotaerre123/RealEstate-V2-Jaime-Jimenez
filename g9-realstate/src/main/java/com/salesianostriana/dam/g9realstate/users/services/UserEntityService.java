@@ -1,6 +1,9 @@
 package com.salesianostriana.dam.g9realstate.users.services;
 
+import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
+import com.salesianostriana.dam.g9realstate.service.InmobiliariaService;
 import com.salesianostriana.dam.g9realstate.service.base.BaseService;
+import com.salesianostriana.dam.g9realstate.users.dto.CreateGestorDto;
 import com.salesianostriana.dam.g9realstate.users.dto.CreateUserDto;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import com.salesianostriana.dam.g9realstate.users.model.UserRole;
@@ -13,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,6 +26,7 @@ import java.util.stream.Stream;
 public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityRepository> implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
+    private final InmobiliariaService inmobiliariaService;
 
 
     @Override
@@ -33,6 +38,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
     public List<UserEntity> loadUserByRole(UserRole roles) throws UsernameNotFoundException{
         return this.repositorio.findByRoles(roles);
     }
+
 
     public UserEntity savePropietario(CreateUserDto newUser){
         if (newUser.getPassword().contentEquals(newUser.getPassword2())){
@@ -54,7 +60,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
         }
     }
 
-    public UserEntity saveGestor(CreateUserDto newUser){
+    public UserEntity saveGestor(CreateGestorDto newUser){
         if (newUser.getPassword().contentEquals(newUser.getPassword2())){
             UserEntity userEntity = UserEntity.builder()
                     .nombre(newUser.getNombre())
@@ -65,8 +71,10 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .avatar(newUser.getAvatar())
                     .roles(UserRole.GESTOR)
                     .password(passwordEncoder.encode(newUser.getPassword()))
+                    .inmobiliaria(null)
                     .build();
-
+            Optional<Inmobiliaria> inmobiliaria = inmobiliariaService.findById(newUser.getInmobiliaria());
+            userEntity.addInmobiliaria(inmobiliaria.get());
             return save(userEntity);
         }else{
             return null;

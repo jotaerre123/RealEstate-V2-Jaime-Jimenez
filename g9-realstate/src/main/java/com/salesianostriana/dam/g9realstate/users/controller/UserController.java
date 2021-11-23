@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.g9realstate.users.controller;
 
 
+import com.salesianostriana.dam.g9realstate.users.dto.CreateGestorDto;
 import com.salesianostriana.dam.g9realstate.users.dto.CreateUserDto;
 import com.salesianostriana.dam.g9realstate.users.dto.GetUserDto;
 import com.salesianostriana.dam.g9realstate.users.dto.UserDtoConverter;
@@ -35,10 +36,21 @@ public class UserController {
     }
 
     @PostMapping("gestor")
-    public ResponseEntity<GetUserDto> nuevoGestor(@RequestBody CreateUserDto newUser){
+    public ResponseEntity<GetUserDto> nuevoGestor(@RequestBody CreateGestorDto newUser){
         UserEntity saved = userEntityService.saveGestor(newUser);
 
-        if(saved == null){
+        if(saved == null || saved.getInmobiliaria()== null){
+            return ResponseEntity.badRequest().build();
+        }else{
+            return ResponseEntity.ok(userDtoConverter.convertUserEntityToGetUserDto(saved));
+        }
+    }
+
+    @PostMapping("admin")
+    public ResponseEntity<GetUserDto> nuevoAdmin(@RequestBody CreateUserDto newUser){
+        UserEntity saved = userEntityService.saveAdmin(newUser);
+
+        if (saved == null){
             return ResponseEntity.badRequest().build();
         }else{
             return ResponseEntity.ok(userDtoConverter.convertUserEntityToGetUserDto(saved));
