@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,7 +37,6 @@ public class UserEntity implements UserDetails{
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(unique = true)
     private String nombre;
 
     private String apellidos;
@@ -54,22 +54,14 @@ public class UserEntity implements UserDetails{
     private String password;
 
 
-    @ElementCollection(fetch = FetchType.EAGER)
+
     @Enumerated(EnumType.STRING)
-    private Set<UserRole> roles;
+    private UserRole roles;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles
-                .stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
+        return List.of(new SimpleGrantedAuthority("ROLE_" + roles.name()));
     }
 
     @Override
@@ -94,6 +86,6 @@ public class UserEntity implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

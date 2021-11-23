@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,6 +30,10 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                 .orElseThrow(() -> new UsernameNotFoundException(email + "no encontrado"));
     }
 
+    public List<UserEntity> loadUserByRole(UserRole roles) throws UsernameNotFoundException{
+        return this.repositorio.findByRoles(roles);
+    }
+
     public UserEntity savePropietario(CreateUserDto newUser){
         if (newUser.getPassword().contentEquals(newUser.getPassword2())){
             UserEntity userEntity = UserEntity.builder()
@@ -38,7 +43,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .telefono(newUser.getTelefono())
                     .email(newUser.getEmail())
                     .avatar(newUser.getAvatar())
-                    .roles(Stream.of(UserRole.PROPIETARIO).collect(Collectors.toSet()))
+                    .roles(UserRole.PROPIETARIO)
                     .password(passwordEncoder.encode(newUser.getPassword()))
                     //Set.of(UserRole.PROPIETARIO)
                     .build();
@@ -58,7 +63,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .telefono(newUser.getTelefono())
                     .email(newUser.getEmail())
                     .avatar(newUser.getAvatar())
-                    .roles(Stream.of(UserRole.PROPIETARIO).collect(Collectors.toSet()))
+                    .roles(UserRole.GESTOR)
                     .password(passwordEncoder.encode(newUser.getPassword()))
                     .build();
 
@@ -77,7 +82,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .telefono(newUser.getTelefono())
                     .email(newUser.getEmail())
                     .avatar(newUser.getAvatar())
-                    .roles(Stream.of(UserRole.PROPIETARIO).collect(Collectors.toSet()))
+                    .roles(UserRole.ADMIN)
                     .password(passwordEncoder.encode(newUser.getPassword()))
                     .build();
 
