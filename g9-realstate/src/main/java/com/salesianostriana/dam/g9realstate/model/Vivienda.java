@@ -39,7 +39,7 @@ public class Vivienda implements Serializable {
     private boolean tieneGaraje;
 
     @ManyToOne
-    @JoinColumn(name = "inmobliaria", foreignKey = @ForeignKey(name = "FK_VIVIENDA_INMOBILIARIA"))
+    @JoinColumn(name = "inmobiliaria", foreignKey = @ForeignKey(name = "FK_VIVIENDA_INMOBILIARIA"))
     private Inmobiliaria inmobiliaria;
 
    /* @ManyToOne

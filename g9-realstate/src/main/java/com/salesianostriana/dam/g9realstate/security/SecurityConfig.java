@@ -2,6 +2,7 @@ package com.salesianostriana.dam.g9realstate.security;
 
 import com.salesianostriana.dam.g9realstate.security.jwt.JwtAccessDeniedHandler;
 import com.salesianostriana.dam.g9realstate.security.jwt.JwtAuthorizationFilter;
+import com.salesianostriana.dam.g9realstate.users.model.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,9 +50,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/producto/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
-                .antMatchers(HttpMethod.GET, "/propietario/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/login").anonymous()
+                .antMatchers(HttpMethod.POST, "/auth/register/user").anonymous()
+                .antMatchers(HttpMethod.POST, "/auth/register/gestor").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/auth/register/admin").anonymous()//esto se cambiará más adelante con un admin precargado
+                .antMatchers(HttpMethod.GET, "/propietario/**").authenticated()
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 

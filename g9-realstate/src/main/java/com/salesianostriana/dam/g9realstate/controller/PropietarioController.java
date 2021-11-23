@@ -29,7 +29,7 @@ public class PropietarioController {
                     description = "Se han encontrado los propietarios",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserEntity.class))}),
-            @ApiResponse(responseCode = "400",
+            @ApiResponse(responseCode = "404",
                     description = "No se han encontrado los propietarios",
                     content = @Content),
     })

@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.g9realstate.users.model;
 
+import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
@@ -57,6 +58,21 @@ public class UserEntity implements UserDetails{
 
     @Enumerated(EnumType.STRING)
     private UserRole roles;
+
+    @ManyToOne
+    @JoinColumn(name = "inmobiliaria_id", foreignKey = @ForeignKey(name = "PK_USER_INMOBILIARIA"), nullable = true)
+    private Inmobiliaria inmobiliaria;
+
+
+    public void addInmobiliaria(Inmobiliaria i) {
+        this.inmobiliaria = i;
+        i.getUserEntity().add(this);
+    }
+
+    public void removeInmobiliaria(Inmobiliaria i) {
+        i.getUserEntity().remove(this);
+        this.inmobiliaria = null;
+    }
 
 
     @Override
