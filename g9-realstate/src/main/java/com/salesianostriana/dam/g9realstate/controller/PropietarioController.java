@@ -1,67 +1,51 @@
 package com.salesianostriana.dam.g9realstate.controller;
 
-import com.salesianostriana.dam.g9realstate.dto.*;
-import com.salesianostriana.dam.g9realstate.model.Propietario;
-
-import com.salesianostriana.dam.g9realstate.model.Vivienda;
-import com.salesianostriana.dam.g9realstate.service.PropietarioService;
-import com.salesianostriana.dam.g9realstate.util.pagination.PaginationLinksUtils;
+import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
+import com.salesianostriana.dam.g9realstate.users.model.UserRole;
+import com.salesianostriana.dam.g9realstate.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 @RequestMapping("/propietario/")
 @RestController
 public class PropietarioController {
 
-    private final PropietarioService propietarioService;
-    private final PropietarioDtoConverter propietarioDtoConverter;
-    private final PaginationLinksUtils paginationLinksUtils;
+    private final UserEntityService userEntityService;
 
     @Operation(summary = "Obtiene todos los propietarios creados")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se han encontrado los propietarios",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Propietario.class))}),
+                            schema = @Schema(implementation = UserEntity.class))}),
             @ApiResponse(responseCode = "400",
                     description = "No se han encontrado los propietarios",
                     content = @Content),
     })
     @GetMapping("")
-    public ResponseEntity<Page<GetPropietarioDto>> findAll(@PageableDefault(size = 8, page = 0) Pageable pageable, HttpServletRequest request){
-
-        Page<Propietario> data = propietarioService.findAll(pageable);
+    public ResponseEntity<List<UserEntity>> findAll(){
+        List<UserEntity> data = userEntityService.loadUserByRole(UserRole.PROPIETARIO);
 
         if (data.isEmpty()){
             return ResponseEntity.notFound().build();
-        }else {
-            Page<GetPropietarioDto> result =
-                    data.map(propietarioDtoConverter::propietarioToGetPropietarioDto);
+        }else{
+            List<UserEntity> lista = data.stream().collect(Collectors.toList());
 
-            UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
-            return ResponseEntity.ok().header("link", paginationLinksUtils.createLinkHeader(result, uriBuilder)).body(result);
+            return ResponseEntity.ok().body(lista);
         }
-
-
     }
-    @Operation(summary = "Obtiene el propietario que le indicamos por ID")
+    /*@Operation(summary = "Obtiene el propietario que le indicamos por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se ha encontrado el propietario especificado",
@@ -131,7 +115,7 @@ public class PropietarioController {
 
         }
 
-    }
+    }*/
 
 
 }

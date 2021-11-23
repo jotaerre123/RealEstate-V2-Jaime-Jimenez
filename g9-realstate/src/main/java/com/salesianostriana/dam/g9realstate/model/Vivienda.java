@@ -42,7 +42,7 @@ public class Vivienda implements Serializable {
     @JoinColumn(name = "inmobliaria", foreignKey = @ForeignKey(name = "FK_VIVIENDA_INMOBILIARIA"))
     private Inmobiliaria inmobiliaria;
 
-    @ManyToOne
+   /* @ManyToOne
     @JoinColumn(name = "propietario", foreignKey = @ForeignKey(name = "FK_VIVIENDA_PROPIETARIO"))
     private Propietario propietario;
 
@@ -70,7 +70,7 @@ public class Vivienda implements Serializable {
     public void removePropietario(Propietario p){
         p.getListaViviendas().remove(this);
         this.propietario=null;
-    }
+    }*/
 
     public Vivienda(String titulo, String descripcion, String provincia, double precio, int numHabitaciones, int numBaños, double metrosCuadrados, String avatar) {
         this.titulo = titulo;
