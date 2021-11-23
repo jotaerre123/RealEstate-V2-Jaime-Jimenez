@@ -39,6 +39,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .email(newUser.getEmail())
                     .avatar(newUser.getAvatar())
                     .roles(Stream.of(UserRole.PROPIETARIO).collect(Collectors.toSet()))
+                    .password(passwordEncoder.encode(newUser.getPassword()))
                     //Set.of(UserRole.PROPIETARIO)
                     .build();
 
@@ -58,6 +59,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .email(newUser.getEmail())
                     .avatar(newUser.getAvatar())
                     .roles(Stream.of(UserRole.PROPIETARIO).collect(Collectors.toSet()))
+                    .password(passwordEncoder.encode(newUser.getPassword()))
                     .build();
 
             return save(userEntity);
@@ -76,6 +78,7 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
                     .email(newUser.getEmail())
                     .avatar(newUser.getAvatar())
                     .roles(Stream.of(UserRole.PROPIETARIO).collect(Collectors.toSet()))
+                    .password(passwordEncoder.encode(newUser.getPassword()))
                     .build();
 
             return save(userEntity);

@@ -9,6 +9,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import io.jsonwebtoken.SignatureException;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class JwtProvider {
     public static final String TOKEN_HEADER = "Authorization";
     public static final String TOKEN_PREFIX = "Bearer ";
 
-    @Value("${jwt.secret:elsecretoibericoeselquemasmegusta}")
+    @Value("${jwt.secret:abcdefghijkikiykyukyurkjhfdkjhdhjhfgsf}")
     private String jwtSecret;
 
     @Value("${jwt.duration:86400}")
@@ -54,7 +55,7 @@ public class JwtProvider {
                 .setHeaderParam("typ", TOKEN_TYPE)
                 .setSubject(user.getId().toString())
                 .setIssuedAt(tokenExpirationDate)
-                .claim("nombre", user.getNombre())
+                .claim("email", user.getEmail())
                 .claim("role", user.getRoles().toString())
                 .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
                 .compact();
@@ -72,7 +73,7 @@ public class JwtProvider {
         try {
             parser.parseClaimsJws(token);
             return true;
-        } catch (/*SignatureException*/MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
+        } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
             log.info("Error con el token: " + ex.getMessage());
         }
         return false;

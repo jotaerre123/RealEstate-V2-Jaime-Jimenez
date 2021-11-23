@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
-        // Para dar acceso a h2
+
         http.headers().frameOptions().disable();
 
 
