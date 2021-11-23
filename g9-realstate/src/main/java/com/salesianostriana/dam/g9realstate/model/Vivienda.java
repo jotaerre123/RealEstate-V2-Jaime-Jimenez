@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.g9realstate.model;
 
+import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,11 +43,11 @@ public class Vivienda implements Serializable {
     @JoinColumn(name = "inmobiliaria", foreignKey = @ForeignKey(name = "FK_VIVIENDA_INMOBILIARIA"))
     private Inmobiliaria inmobiliaria;
 
-   /* @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "propietario", foreignKey = @ForeignKey(name = "FK_VIVIENDA_PROPIETARIO"))
-    private Propietario propietario;
+    private UserEntity propietario;
 
-    @Builder.Default
+    /*@Builder.Default
     @OneToMany(mappedBy = "vivienda", cascade = {CascadeType.REMOVE})
     private List<Interesa> interesas = new ArrayList<>();
 
@@ -60,17 +61,17 @@ public class Vivienda implements Serializable {
     public void removeInmobiliaria(Inmobiliaria i){
         i.getViviendas().remove(this);
         this.inmobiliaria=null;
-    }
+    }*/
 
-    public void addPropietario(Propietario p){
+    public void addPropietario(UserEntity p){
         this.propietario = p;
         p.getListaViviendas().add(this);
     }
 
-    public void removePropietario(Propietario p){
+    public void removePropietario(UserEntity p){
         p.getListaViviendas().remove(this);
         this.propietario=null;
-    }*/
+    }
 
     public Vivienda(String titulo, String descripcion, String provincia, double precio, int numHabitaciones, int numBaños, double metrosCuadrados, String avatar) {
         this.titulo = titulo;

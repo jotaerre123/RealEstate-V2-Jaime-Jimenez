@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.g9realstate.users.model;
 
 import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
+import com.salesianostriana.dam.g9realstate.model.Vivienda;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
@@ -10,10 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -62,6 +60,10 @@ public class UserEntity implements UserDetails{
     @ManyToOne
     @JoinColumn(name = "inmobiliaria_id", foreignKey = @ForeignKey(name = "PK_USER_INMOBILIARIA"), nullable = true)
     private Inmobiliaria inmobiliaria;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "propietario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vivienda> listaViviendas = new ArrayList<>();
 
 
     public void addInmobiliaria(Inmobiliaria i) {
