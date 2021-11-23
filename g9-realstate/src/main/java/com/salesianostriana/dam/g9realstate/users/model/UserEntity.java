@@ -36,7 +36,6 @@ public class UserEntity implements UserDetails{
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(unique = true)
     private String nombre;
 
     private String apellidos;
@@ -67,10 +66,7 @@ public class UserEntity implements UserDetails{
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public String getPassword() {
-        return null;
-    }
+
 
     @Override
     public String getUsername() {
@@ -94,6 +90,6 @@ public class UserEntity implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
