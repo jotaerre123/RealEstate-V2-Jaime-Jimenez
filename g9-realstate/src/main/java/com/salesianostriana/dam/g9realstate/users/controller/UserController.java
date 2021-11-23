@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth/")
+@RequestMapping("/auth/register/")
 public class UserController {
 
     private final UserEntityService userEntityService;
     private final UserDtoConverter userDtoConverter;
 
-    @PostMapping("register/user")
+    @PostMapping("user")
     public ResponseEntity<GetUserDto> nuevoUsuario(@RequestBody CreateUserDto newUser){
 
         UserEntity saved = userEntityService.savePropietario(newUser);
@@ -34,7 +34,7 @@ public class UserController {
 
     }
 
-    @PostMapping("register/gestor")
+    @PostMapping("gestor")
     public ResponseEntity<GetUserDto> nuevoGestor(@RequestBody CreateUserDto newUser){
         UserEntity saved = userEntityService.saveGestor(newUser);
 
@@ -45,9 +45,7 @@ public class UserController {
         }
     }
 
-    public ResponseEntity<GetUserDto> nuevoAdmin(@RequestBody CreateUserDto newUser){
-        UserEntity saved = userEntityService.saveAdmin()
-    }
+
 
 
 
