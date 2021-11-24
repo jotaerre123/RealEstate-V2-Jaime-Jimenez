@@ -1,5 +1,9 @@
 package com.salesianostriana.dam.g9realstate.controller;
 
+import com.salesianostriana.dam.g9realstate.dto.GetPropietario;
+import com.salesianostriana.dam.g9realstate.security.jwt.JwtAuthorizationFilter;
+import com.salesianostriana.dam.g9realstate.security.jwt.JwtProvider;
+import com.salesianostriana.dam.g9realstate.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import com.salesianostriana.dam.g9realstate.users.model.UserRole;
 import com.salesianostriana.dam.g9realstate.users.services.UserEntityService;
@@ -12,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -22,6 +29,9 @@ import java.util.stream.Collectors;
 public class PropietarioController {
 
     private final UserEntityService userEntityService;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
+    private final JwtProvider jwtProvider;
+    private final UserDtoConverter userDtoConverter;
 
     @Operation(summary = "Obtiene todos los propietarios creados")
     @ApiResponses(value = {
@@ -45,34 +55,37 @@ public class PropietarioController {
             return ResponseEntity.ok().body(lista);
         }
     }
-    /*@Operation(summary = "Obtiene el propietario que le indicamos por ID")
+    @Operation(summary = "Obtiene el propietario que le indicamos por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se ha encontrado el propietario especificado",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Propietario.class))}),
-            @ApiResponse(responseCode = "400",
-                    description = "No se ha encontrado el propietario",
+                            schema = @Schema(implementation = UserEntity.class))}),
+            @ApiResponse(responseCode = "403",
+                    description = "Authentication failed",
                     content = @Content),
     })
     @GetMapping("{id}")
-    public ResponseEntity<List<GetPropietarioViviendaDto>> findOne(@PathVariable Long id){
-        Optional<Propietario> data = propietarioService.findById(id);
+    public ResponseEntity<List<GetPropietario>> findOnePropietario(@PathVariable UUID id, HttpServletRequest request) {
+        Optional<UserEntity> propietario = userEntityService.loadUserById(id);
 
-        if (data.isEmpty()) {
+        String token = jwtAuthorizationFilter.getJwtFromRequest(request);
+        UUID idPropietario = jwtProvider.getUserIdFromJwt(token);
 
+        Optional<UserEntity> userEntity = userEntityService.loadUserById(idPropietario);
+
+        if(!userEntity.get().getRoles().equals(UserRole.ADMIN) && !propietario.get().getId().equals(idPropietario)){
             return ResponseEntity.notFound().build();
-
-        } else {
-            List<GetPropietarioViviendaDto> propietarioDto = data
-                    .stream().map(propietarioDtoConverter :: propietarioToGetPropietarioViviendaDto)
+        }else {
+            List<GetPropietario> propietarioDto = propietario.stream()
+                    .map(userDtoConverter::propietarioToGetPropietarioConViviendas)
                     .collect(Collectors.toList());
             return ResponseEntity.ok().body(propietarioDto);
-
         }
     }
 
-    @Operation(summary = "Se elimina el propietario")
+
+    /*@Operation(summary = "Se elimina el propietario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Se ha borrado el propietario",

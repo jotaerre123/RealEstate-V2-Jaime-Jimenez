@@ -39,6 +39,10 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
         return this.repositorio.findByRoles(roles);
     }
 
+    public Optional<UserEntity> loadUserById(UUID id) throws UsernameNotFoundException{
+        return this.repositorio.findById(id);
+    }
+
 
     public UserEntity savePropietario(CreateUserDto newUser){
         if (newUser.getPassword().contentEquals(newUser.getPassword2())){
