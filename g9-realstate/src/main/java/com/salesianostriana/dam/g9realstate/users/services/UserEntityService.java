@@ -39,8 +39,8 @@ public class UserEntityService extends BaseService<UserEntity, UUID, UserEntityR
         return this.repositorio.findByRoles(roles);
     }
 
-    public Optional<UserEntity> loadUserById(Long id, UserRole rol) throws UsernameNotFoundException{
-        return this.repositorio.findByIdByRol(id, rol);
+    public Optional<UserEntity> loadUserById(UUID id) throws UsernameNotFoundException{
+        return this.repositorio.findById(id);
     }
 
 

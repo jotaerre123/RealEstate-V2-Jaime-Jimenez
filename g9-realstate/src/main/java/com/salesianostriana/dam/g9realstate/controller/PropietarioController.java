@@ -66,13 +66,15 @@ public class PropietarioController {
                     content = @Content),
     })
     @GetMapping("{id}")
-    public ResponseEntity<List<GetPropietario>> findOnePropietario(@PathVariable Long id, HttpServletRequest request) {
-        Optional<UserEntity> propietario = userEntityService.loadUserById(id, UserRole.PROPIETARIO);
+    public ResponseEntity<List<GetPropietario>> findOnePropietario(@PathVariable UUID id, HttpServletRequest request) {
+        Optional<UserEntity> propietario = userEntityService.loadUserById(id);
 
         String token = jwtAuthorizationFilter.getJwtFromRequest(request);
         UUID idPropietario = jwtProvider.getUserIdFromJwt(token);
 
-        if(!propietario.get().getRoles().equals(UserRole.ADMIN) && !propietario.get().getRoles().equals(idPropietario)){
+        Optional<UserEntity> userEntity = userEntityService.loadUserById(idPropietario);
+
+        if(!userEntity.get().getRoles().equals(UserRole.ADMIN) && !propietario.get().getId().equals(idPropietario)){
             return ResponseEntity.notFound().build();
         }else {
             List<GetPropietario> propietarioDto = propietario.stream()
@@ -80,7 +82,6 @@ public class PropietarioController {
                     .collect(Collectors.toList());
             return ResponseEntity.ok().body(propietarioDto);
         }
-        //return ResponseEntity.of(userEntityService.findById(id).map(userDtoConverter::propietarioToGetPropietarioConViviendas));
     }
 
 
