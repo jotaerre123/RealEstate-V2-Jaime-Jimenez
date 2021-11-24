@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
-@RequestMapping("/propietario/")
+@RequestMapping("/propietario")
 @RestController
 public class PropietarioController {
 
@@ -43,7 +43,7 @@ public class PropietarioController {
                     description = "No se han encontrado los propietarios",
                     content = @Content),
     })
-    @GetMapping("")
+    @GetMapping("/")
     public ResponseEntity<List<UserEntity>> findAll(){
         List<UserEntity> data = userEntityService.loadUserByRole(UserRole.PROPIETARIO);
 
@@ -65,7 +65,7 @@ public class PropietarioController {
                     description = "Authentication failed",
                     content = @Content),
     })
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<List<GetPropietario>> findOnePropietario(@PathVariable UUID id, HttpServletRequest request) {
         Optional<UserEntity> propietario = userEntityService.loadUserById(id);
 
@@ -85,29 +85,37 @@ public class PropietarioController {
     }
 
 
-    /*@Operation(summary = "Se elimina el propietario")
+
+    @Operation(summary = "Se elimina el propietario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "Se ha borrado el propietario",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Propietario.class))}),
+                            schema = @Schema(implementation = UserEntity.class))}),
             @ApiResponse(responseCode = "404",
                     description = "No se ha borrado el propietario",
                     content = @Content),
     })
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> deletePropietario(@PathVariable Long id){
-        Optional<Propietario> propietario = propietarioService.findById(id);
-        if (propietario.isEmpty()) {
-            return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePropietario(@PathVariable UUID id, HttpServletRequest request){
+
+        Optional<UserEntity> propietario = userEntityService.loadUserById(id);
+
+        String token = jwtAuthorizationFilter.getJwtFromRequest(request);
+        UUID idPropietario = jwtProvider.getUserIdFromJwt(token);
+
+        Optional<UserEntity> userEntity = userEntityService.loadUserById(idPropietario);
+
+        if (!userEntityService.loadUserById(id).isEmpty() && !propietario.get().getId().equals(idPropietario) && !userEntity.get().getRoles().equals(UserRole.ADMIN)) {
+            return ResponseEntity.status(403).build();
         } else {
-            propietarioService.deleteById(id);
+            userEntityService.deleteById(id);
             return ResponseEntity.noContent().build();
         }
 
     }
 
-    @Operation(summary = "Crea un nuevo propietario")
+    /*@Operation(summary = "Crea un nuevo propietario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se ha creado el propietario",
