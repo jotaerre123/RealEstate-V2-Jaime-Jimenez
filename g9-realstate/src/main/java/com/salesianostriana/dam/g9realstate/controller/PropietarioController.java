@@ -75,7 +75,7 @@ public class PropietarioController {
         Optional<UserEntity> userEntity = userEntityService.loadUserById(idPropietario);
 
         if(!userEntity.get().getRoles().equals(UserRole.ADMIN) && !propietario.get().getId().equals(idPropietario)){
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(403).build();
         }else {
             List<GetPropietario> propietarioDto = propietario.stream()
                     .map(userDtoConverter::propietarioToGetPropietarioConViviendas)

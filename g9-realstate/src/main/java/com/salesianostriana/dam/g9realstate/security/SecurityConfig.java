@@ -54,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/auth/register/user").anonymous()
                 .antMatchers(HttpMethod.POST, "/auth/register/gestor").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/auth/register/admin").anonymous()//esto se cambiará más adelante con un admin precargado
-                .antMatchers(HttpMethod.GET, "/propietario/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/propietario/").authenticated()
+                .antMatchers(HttpMethod.POST, "/propietario/{id}").hasRole("ADMIN, PROPIETARIO")
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 
