@@ -1,6 +1,7 @@
-package com.salesianostriana.dam.g9realstate.dto;
+package com.salesianostriana.dam.g9realstate.dto.propietario;
 
-import com.salesianostriana.dam.g9realstate.model.Vivienda;
+import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDto;
+import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDtoPequenio;
 import lombok.*;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetPropietario {
+public class GetPropietarioDto {
 
     private String nombre;
     private String apellidos;
@@ -19,5 +20,5 @@ public class GetPropietario {
     private String telefono;
     private String avatar;
     private String role;
-    private List<GetViviendaDto> viviendas;
+    private List<GetViviendaDtoPequenio> viviendas;
 }

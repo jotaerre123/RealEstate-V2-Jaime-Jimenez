@@ -1,8 +1,6 @@
 package com.salesianostriana.dam.g9realstate.controller;
 
-import com.salesianostriana.dam.g9realstate.dto.GetPropietario;
-import com.salesianostriana.dam.g9realstate.security.jwt.JwtAuthorizationFilter;
-import com.salesianostriana.dam.g9realstate.security.jwt.JwtProvider;
+import com.salesianostriana.dam.g9realstate.dto.propietario.GetPropietarioDto;
 import com.salesianostriana.dam.g9realstate.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import com.salesianostriana.dam.g9realstate.users.model.UserRole;
@@ -14,9 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,8 +27,6 @@ import java.util.stream.Collectors;
 public class PropietarioController {
 
     private final UserEntityService userEntityService;
-    private final JwtAuthorizationFilter jwtAuthorizationFilter;
-    private final JwtProvider jwtProvider;
     private final UserDtoConverter userDtoConverter;
 
     @Operation(summary = "Obtiene todos los propietarios creados")
@@ -66,18 +62,14 @@ public class PropietarioController {
                     content = @Content),
     })
     @GetMapping("/{id}")
-    public ResponseEntity<List<GetPropietario>> findOnePropietario(@PathVariable UUID id, HttpServletRequest request) {
+    public ResponseEntity<List<GetPropietarioDto>> findOnePropietario(@PathVariable UUID id, @AuthenticationPrincipal UserEntity userEntity) {
         Optional<UserEntity> propietario = userEntityService.loadUserById(id);
 
-        String token = jwtAuthorizationFilter.getJwtFromRequest(request);
-        UUID idPropietario = jwtProvider.getUserIdFromJwt(token);
 
-        Optional<UserEntity> userEntity = userEntityService.loadUserById(idPropietario);
-
-        if(!userEntity.get().getRoles().equals(UserRole.ADMIN) && !propietario.get().getId().equals(idPropietario)){
+        if(!userEntity.getRoles().equals(UserRole.ADMIN) && !id.equals(userEntity.getId())){
             return ResponseEntity.status(403).build();
         }else {
-            List<GetPropietario> propietarioDto = propietario.stream()
+            List<GetPropietarioDto> propietarioDto = propietario.stream()
                     .map(userDtoConverter::propietarioToGetPropietarioConViviendas)
                     .collect(Collectors.toList());
             return ResponseEntity.ok().body(propietarioDto);
@@ -97,21 +89,19 @@ public class PropietarioController {
                     content = @Content),
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePropietario(@PathVariable UUID id, HttpServletRequest request){
+    public ResponseEntity<?> deletePropietario(@PathVariable UUID id, @AuthenticationPrincipal UserEntity userEntity){
 
         Optional<UserEntity> propietario = userEntityService.loadUserById(id);
 
-        String token = jwtAuthorizationFilter.getJwtFromRequest(request);
-        UUID idPropietario = jwtProvider.getUserIdFromJwt(token);
 
-        Optional<UserEntity> userEntity = userEntityService.loadUserById(idPropietario);
-
-        if (!userEntityService.loadUserById(id).isEmpty() && !propietario.get().getId().equals(idPropietario) && !userEntity.get().getRoles().equals(UserRole.ADMIN)) {
-            return ResponseEntity.status(403).build();
-        } else {
+        if (propietario.isEmpty() && id.equals(userEntity.getId()) || userEntity.getRoles().equals(UserRole.ADMIN)) {
+            //duda: solo me deja si soy admin
             userEntityService.deleteById(id);
             return ResponseEntity.noContent().build();
+
         }
+
+        return ResponseEntity.status(403).build();
 
     }
 
