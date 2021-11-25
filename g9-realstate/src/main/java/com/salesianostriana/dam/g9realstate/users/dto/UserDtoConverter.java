@@ -1,7 +1,8 @@
 package com.salesianostriana.dam.g9realstate.users.dto;
 
-import com.salesianostriana.dam.g9realstate.dto.GetPropietario;
-import com.salesianostriana.dam.g9realstate.dto.GetViviendaDto;
+import com.salesianostriana.dam.g9realstate.dto.propietario.GetPropietarioDto;
+import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDto;
+import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDtoPequenio;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 
 import org.springframework.stereotype.Component;
@@ -21,9 +22,9 @@ public class UserDtoConverter {
                 .build();
     }
 
-    public GetPropietario propietarioToGetPropietarioConViviendas(UserEntity user){
+    public GetPropietarioDto propietarioToGetPropietarioConViviendas(UserEntity user){
 
-        return GetPropietario.builder()
+        return GetPropietarioDto.builder()
                 .nombre(user.getNombre())
                 .apellidos(user.getApellidos())
                 .direccion(user.getDireccion())
@@ -31,10 +32,11 @@ public class UserDtoConverter {
                 .avatar(user.getAvatar())
                 .telefono(user.getTelefono())
                 .role(user.getRoles().name())
-                .viviendas(user.getListaViviendas().stream().map(v -> new GetViviendaDto(v.getId(),v.getTitulo()
+                .viviendas(user.getListaViviendas().stream().map(v -> new GetViviendaDtoPequenio(v.getId(),v.getTitulo()
                         ,v.getProvincia(),
+                        v.getDireccion(),
                         v.getNumBanios(), v.getNumHabitaciones(),v.getMetrosCuadrados(),v.getPrecio()
-                        ,v.getDescripcion(),v.getAvatar())).toList())
+                        ,v.getDescripcion(),v.getAvatar(), v.getTipoVivienda())).toList())
                 .build();
     }
 
