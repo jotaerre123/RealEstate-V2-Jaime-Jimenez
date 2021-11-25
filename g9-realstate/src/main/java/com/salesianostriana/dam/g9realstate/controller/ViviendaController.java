@@ -2,6 +2,7 @@ package com.salesianostriana.dam.g9realstate.controller;
 
 import com.salesianostriana.dam.g9realstate.dto.vivienda.CreateViviendaDto;
 import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDto;
+import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDtoPequenio;
 import com.salesianostriana.dam.g9realstate.dto.vivienda.ViviendaDtoConverter;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
 import com.salesianostriana.dam.g9realstate.service.InmobiliariaService;
@@ -19,12 +20,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -67,6 +66,30 @@ public class ViviendaController {
 
         }
 
+    }
+
+    @Operation(summary = "Obtiene lista de viviendas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado lista de viviendas",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se han encontrado las viviendas",
+                    content = @Content),
+    })
+    @GetMapping("")
+    public ResponseEntity<List<Vivienda>> findAll() {
+
+        List<Vivienda> data = viviendaService.listarViviendasDto();
+
+        if (data.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+
+
+            return ResponseEntity.ok(viviendaService.listarViviendasDto());
+        }
     }
     public GetViviendaDto saveGetViviendaDto(CreateViviendaDto createViviendaDto, UserEntity user){
         GetViviendaDto getViviendaDto = GetViviendaDto.builder()

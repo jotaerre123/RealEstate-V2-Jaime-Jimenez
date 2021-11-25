@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.g9realstate.service;
 
-import com.salesianostriana.dam.g9realstate.dto.vivienda.CreateViviendaDto;
 import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDto;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
 import com.salesianostriana.dam.g9realstate.repos.ViviendaRepository;
@@ -8,8 +7,15 @@ import com.salesianostriana.dam.g9realstate.service.base.BaseService;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ViviendaService extends BaseService<Vivienda, Long, ViviendaRepository> {
+
+    public List<Vivienda> listarViviendasDto() {
+        return repositorio.findAll();
+    }
+
 
     public Vivienda saveViviendaFromGetViviendaDto(GetViviendaDto getViviendaDto, UserEntity userEntity){
        Vivienda vivienda = Vivienda.builder()
