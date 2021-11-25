@@ -73,4 +73,43 @@ public class Vivienda implements Serializable {
         this.propietario=null;
     }
 
+    public Vivienda(String titulo, String descripcion, String avatar, String latlng, String direccion, String codigoPostal, String poblacion, String provincia, TipoVivienda tipoVivienda, double precio, int numHabitaciones, int numBanios, double metrosCuadrados, boolean tienePiscina, boolean tieneAscensor, boolean tieneGaraje) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.avatar = avatar;
+        this.latlng = latlng;
+        this.direccion = direccion;
+        this.codigoPostal = codigoPostal;
+        this.poblacion = poblacion;
+        this.provincia = provincia;
+        this.tipoVivienda = tipoVivienda;
+        this.precio = precio;
+        this.numHabitaciones = numHabitaciones;
+        this.numBanios = numBanios;
+        this.metrosCuadrados = metrosCuadrados;
+        this.tienePiscina = tienePiscina;
+        this.tieneAscensor = tieneAscensor;
+        this.tieneGaraje = tieneGaraje;
+    }
+
+    public Vivienda(Long id, String titulo, String descripcion, String avatar, String latlng, String direccion, String codigoPostal, String poblacion, String provincia, TipoVivienda tipoVivienda, double precio, int numHabitaciones, int numBanios, double metrosCuadrados, boolean tienePiscina, boolean tieneAscensor, boolean tieneGaraje, Inmobiliaria inmobiliaria) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.avatar = avatar;
+        this.latlng = latlng;
+        this.direccion = direccion;
+        this.codigoPostal = codigoPostal;
+        this.poblacion = poblacion;
+        this.provincia = provincia;
+        this.tipoVivienda = tipoVivienda;
+        this.precio = precio;
+        this.numHabitaciones = numHabitaciones;
+        this.numBanios = numBanios;
+        this.metrosCuadrados = metrosCuadrados;
+        this.tienePiscina = tienePiscina;
+        this.tieneAscensor = tieneAscensor;
+        this.tieneGaraje = tieneGaraje;
+        this.inmobiliaria = inmobiliaria;
+    }
 }

@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.g9realstate.dto.vivienda;
 
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
+import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -9,7 +10,6 @@ public class ViviendaDtoConverter {
     public GetViviendaDto viviendaToGetViviendaDTO(Vivienda v) {
         return GetViviendaDto
                 .builder()
-                .id(v.getId())
                 .titulo(v.getTitulo())
                 .descripcion(v.getDescripcion())
                 .precio(v.getPrecio())
@@ -21,24 +21,31 @@ public class ViviendaDtoConverter {
                 .build();
     }
 
-    public Vivienda createViviendaDtoToVivienda(CreateViviendaDto v){
+    public Vivienda createViviendaDtoToVivienda  (CreateViviendaDto v, UserEntity user) {
 
-        return Vivienda.builder()
-                .titulo(v.getTitulo())
-                .provincia(v.getProvincia())
-                .tipoVivienda(v.getTipo())
-                .numBanios(v.getNumBanios())
-                .numHabitaciones(v.getNumHabitaciones())
-                .metrosCuadrados(v.getMetrosCuadrados())
-                .precio(v.getPrecio())
-                .descripcion(v.getDescripcion())
-                .codigoPostal(v.getCodigoPostal())
-                .latlng(v.getLatlng())
-                .poblacion(v.getPoblacion())
-                .tienePiscina(v.isTienePiscina())
-                .tieneAscensor(v.isTieneAscensor())
-                .tieneGaraje(v.isTieneGaraje())
-                .build();
+        Vivienda result = new Vivienda();
+
+        result.setId(v.getId());
+        result.setTitulo(v.getTitulo());
+        result.setDescripcion(v.getDescripcion());
+        result.setAvatar(v.getAvatar());
+        result.setLatlng(v.getLatlng());
+        result.setDireccion(v.getDireccion());
+        result.setCodigoPostal(v.getCodigoPostal());
+        result.setPoblacion(v.getPoblacion());
+        result.setProvincia(v.getProvincia());
+        result.setTipoVivienda(v.getTipo());
+        result.setPrecio(v.getPrecio());
+        result.setNumHabitaciones(v.getNumHabitaciones());
+        result.setMetrosCuadrados(v.getMetrosCuadrados());
+        result.setNumBanios(v.getNumBanios());
+        result.setTienePiscina(v.isTienePiscina());
+        result.setTieneAscensor(v.isTieneAscensor());
+        result.setTieneGaraje(v.isTieneGaraje());
+        //result.setInmobiliaria(inmobiliariaService.findById(v.getInmobiliaria().getId()).get());
+        result.setPropietario(user);
+
+        return result;
     }
 
 }

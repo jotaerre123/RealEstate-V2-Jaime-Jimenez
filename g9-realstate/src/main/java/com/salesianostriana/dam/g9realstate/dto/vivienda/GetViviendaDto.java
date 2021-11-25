@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class GetViviendaDto {
 
-    private Long id;
+
     private String titulo;
     private String provincia;
     private String direccion;
@@ -30,5 +30,5 @@ public class GetViviendaDto {
     private boolean tienePiscina;
     private boolean tieneAscensor;
     private boolean tieneGaraje;
-    private GetUserDto getUserDto;
+    private GetUserDto propietario;
 }

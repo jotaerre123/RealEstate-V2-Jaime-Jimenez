@@ -21,6 +21,10 @@ public class ViviendaService extends BaseService<Vivienda, Long, ViviendaReposit
         return repositorio.findById(id);
     }
 
+    public List<Vivienda> findTop5ViviendaOrderByInteresas (){
+        return repositorio.top5ViviendasInteresas();
+    }
+
 
     public Vivienda saveViviendaFromGetViviendaDto(GetViviendaDto getViviendaDto, UserEntity userEntity){
        Vivienda vivienda = Vivienda.builder()
