@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.g9realstate.users.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
 import lombok.*;
@@ -62,7 +63,8 @@ public class UserEntity implements UserDetails{
     private Inmobiliaria inmobiliaria;
 
     @Builder.Default
-    @OneToMany(mappedBy = "propietario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "propietario", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Vivienda> listaViviendas = new ArrayList<>();
 
 

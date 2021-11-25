@@ -50,21 +50,19 @@ public class ViviendaController {
                     content = @Content),
     })
     @PostMapping("/")
-    public ResponseEntity<GetViviendaDto> createVivienda(@RequestBody CreateViviendaDto vivienda, @AuthenticationPrincipal UserEntity userEntity) {
+    public ResponseEntity<Vivienda> createVivienda(@RequestBody Vivienda vivienda, @AuthenticationPrincipal UserEntity userEntity) {
 
-        if (vivienda.getTitulo().isEmpty() ||  (userEntity.getId() != null)) {
+        if (vivienda.getTitulo().isEmpty() ||  userEntity.getId() == null) {
             return ResponseEntity.badRequest().build();
         } else {
 
+            vivienda.addPropietario(userEntity);
 
-                Vivienda v = viviendaDtoConverter.createViviendaDtoToVivienda(vivienda);
-                GetViviendaDto getViviendaDto = saveGetViviendaDto(vivienda, userEntity);
-                v.addPropietario(userEntity);
-                viviendaService.save(v);
+                viviendaService.save(vivienda);
 
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
-                        .body(getViviendaDto);
+                        .body(vivienda);
 
 
         }

@@ -44,7 +44,7 @@ public class Vivienda implements Serializable {
     private Inmobiliaria inmobiliaria;
 
     @ManyToOne
-    @JoinColumn(name = "propietario", foreignKey = @ForeignKey(name = "FK_VIVIENDA_PROPIETARIO"))
+    @JoinColumn(name = "userEntity_id", foreignKey = @ForeignKey(name = "FK_VIVIENDA_USERENTITY"))
     private UserEntity propietario;
 
     /*@Builder.Default
