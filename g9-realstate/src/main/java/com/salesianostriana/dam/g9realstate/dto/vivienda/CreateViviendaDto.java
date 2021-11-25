@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.g9realstate.dto.vivienda;
 
+import com.salesianostriana.dam.g9realstate.dto.inmobiliaria.GetInmobiliariaDto;
 import com.salesianostriana.dam.g9realstate.model.TipoVivienda;
 import com.salesianostriana.dam.g9realstate.users.dto.GetUserDto;
 import lombok.*;
@@ -11,7 +12,7 @@ import lombok.*;
 @Builder
 public class CreateViviendaDto {
 
-
+    private Long id;
     private String titulo;
     private String provincia;
     private String direccion;
@@ -29,5 +30,6 @@ public class CreateViviendaDto {
     private boolean tieneAscensor;
     private boolean tieneGaraje;
     private GetUserDto propietario;
+    private GetInmobiliariaDto inmobiliaria;
 
 }

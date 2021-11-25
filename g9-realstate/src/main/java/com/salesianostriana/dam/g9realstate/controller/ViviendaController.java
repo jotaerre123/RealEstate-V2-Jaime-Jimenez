@@ -1,6 +1,8 @@
 package com.salesianostriana.dam.g9realstate.controller;
 
 
+import com.salesianostriana.dam.g9realstate.dto.vivienda.CreateViviendaDto;
+import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDto;
 import com.salesianostriana.dam.g9realstate.dto.vivienda.ViviendaDtoConverter;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
 
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -48,22 +51,19 @@ public class ViviendaController {
                     content = @Content),
     })
     @PostMapping("/")
-    public ResponseEntity<Vivienda> createVivienda(@RequestBody Vivienda vivienda, @AuthenticationPrincipal UserEntity userEntity) {
+    public ResponseEntity<GetViviendaDto> createVivienda(@RequestBody CreateViviendaDto vivienda, @AuthenticationPrincipal UserEntity userEntity) {
 
-        if (vivienda.getTitulo().isEmpty() ||  userEntity.getId() == null) {
-            return ResponseEntity.badRequest().build();
-        } else {
+        GetViviendaDto getDto = guardarGetViviendaDto(vivienda, userEntity);
 
-            vivienda.addPropietario(userEntity);
+        Vivienda v = viviendaDtoConverter.createViviendaDtoToVivienda(vivienda, userEntity);
 
-                viviendaService.save(vivienda);
-
-                return ResponseEntity
-                        .status(HttpStatus.CREATED)
-                        .body(vivienda);
+        viviendaService.saveViviendaFromGetViviendaDto(getDto, userEntity);
 
 
-        }
+                return ResponseEntity.status(HttpStatus.CREATED).body(getDto);
+
+
+
 
     }
 
@@ -182,8 +182,25 @@ public class ViviendaController {
             return ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Top de las 5 viviendas que tienen más interesados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado la vivienda",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})
+    })
+    @GetMapping("/top")
+    public ResponseEntity<List<GetViviendaDto>> top5Viviendas (@RequestParam("n") int n){
+        List<Vivienda> data = viviendaService.findTop5ViviendaOrderByInteresas();
 
-    /*public GetViviendaDto saveGetViviendaDto(CreateViviendaDto createViviendaDto, UserEntity user){
+        List<GetViviendaDto> list = data.stream().map(viviendaDtoConverter::viviendaToGetViviendaDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(list);
+    }
+
+
+    public GetViviendaDto guardarGetViviendaDto(CreateViviendaDto createViviendaDto, UserEntity user){
         GetViviendaDto getViviendaDto = GetViviendaDto.builder()
                 .titulo(createViviendaDto.getTitulo())
                 .descripcion(createViviendaDto.getDescripcion())
@@ -201,10 +218,10 @@ public class ViviendaController {
                 .numHabitaciones(createViviendaDto.getNumHabitaciones())
                 .metrosCuadrados(createViviendaDto.getMetrosCuadrados())
                 .numBanios(createViviendaDto.getNumBanios())
-                .getUserDto(userDtoConverter.convertUserEntityToGetUserDto(user))
+                .propietario(userDtoConverter.convertUserEntityToGetUserDto(user))
                 .build();
 
         return getViviendaDto;
-    }*/
+    }
 
 }
