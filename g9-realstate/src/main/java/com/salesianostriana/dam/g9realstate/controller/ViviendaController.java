@@ -91,6 +91,33 @@ public class ViviendaController {
             return ResponseEntity.ok(viviendaService.listarViviendasDto());
         }
     }
+
+    @Operation(summary = "Obtiene una vivienda en base a su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado la vivienda",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha encontrado la vivienda",
+                    content = @Content),
+    })
+    @GetMapping("{id}")
+    public ResponseEntity<Optional<Vivienda>> findOne (@PathVariable Long id) {
+
+        Optional<Vivienda> data = viviendaService.findOne(id);
+
+        if (data == null) {
+
+            return ResponseEntity.notFound().build();
+
+        } else {
+
+            return ResponseEntity.ok().body(data);
+
+        }
+
+    }
     public GetViviendaDto saveGetViviendaDto(CreateViviendaDto createViviendaDto, UserEntity user){
         GetViviendaDto getViviendaDto = GetViviendaDto.builder()
                 .titulo(createViviendaDto.getTitulo())

@@ -8,12 +8,17 @@ import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ViviendaService extends BaseService<Vivienda, Long, ViviendaRepository> {
 
     public List<Vivienda> listarViviendasDto() {
         return repositorio.findAll();
+    }
+
+    public Optional<Vivienda> findOne(Long id){
+        return repositorio.findById(id);
     }
 
 
