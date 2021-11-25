@@ -2,6 +2,7 @@ package com.salesianostriana.dam.g9realstate.users.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
+import com.salesianostriana.dam.g9realstate.model.Interesa;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -63,10 +64,18 @@ public class UserEntity implements UserDetails{
     private Inmobiliaria inmobiliaria;
 
     @Builder.Default
-    @OneToMany(mappedBy = "propietario", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "propietario", fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     @JsonIgnore
     private List<Vivienda> listaViviendas = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "interesado")
+    private List<Interesa> interesas = new ArrayList<>();
+
+    @PreRemove
+    public void preRemove(){
+        interesas.forEach(v -> v.setInteresado(null));
+    }
 
     public void addInmobiliaria(Inmobiliaria i) {
         this.inmobiliaria = i;

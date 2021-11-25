@@ -1,16 +1,15 @@
 package com.salesianostriana.dam.g9realstate.controller;
 
-import com.salesianostriana.dam.g9realstate.dto.vivienda.CreateViviendaDto;
-import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDto;
-import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDtoPequenio;
+
 import com.salesianostriana.dam.g9realstate.dto.vivienda.ViviendaDtoConverter;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
-import com.salesianostriana.dam.g9realstate.service.InmobiliariaService;
+
 import com.salesianostriana.dam.g9realstate.service.ViviendaService;
-import com.salesianostriana.dam.g9realstate.users.dto.GetUserDto;
+
 import com.salesianostriana.dam.g9realstate.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
-import com.salesianostriana.dam.g9realstate.users.services.UserEntityService;
+import com.salesianostriana.dam.g9realstate.users.model.UserRole;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,10 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -118,7 +117,73 @@ public class ViviendaController {
         }
 
     }
-    public GetViviendaDto saveGetViviendaDto(CreateViviendaDto createViviendaDto, UserEntity user){
+
+    @Operation(summary = "Edita una vivienda anteriormente creada, buscando por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha editado la vivienda",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha editado la vivienda",
+                    content = @Content),
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<Vivienda> edit(@RequestBody Vivienda v, @PathVariable Long id, @AuthenticationPrincipal UserEntity userEntity) {
+
+
+
+
+        if (!userEntity.getRoles().equals(UserRole.ADMIN) && !viviendaService.findById(id).get().getPropietario().getId().equals(userEntity.getId())) {
+            return ResponseEntity.notFound().build();
+
+        } else {
+            return ResponseEntity.of(
+
+                    viviendaService.findById(id).map(m -> {
+                        m.setTitulo(v.getTitulo());
+                        m.setDescripcion(v.getDescripcion());
+                        m.setAvatar(v.getAvatar());
+                        m.setCodigoPostal(v.getCodigoPostal());
+                        m.setLatlng(v.getLatlng());
+                        m.setMetrosCuadrados(v.getMetrosCuadrados());
+                        m.setNumBanios(v.getNumBanios());
+                        m.setNumHabitaciones(v.getNumHabitaciones());
+                        m.setPoblacion(v.getPoblacion());
+                        m.setPrecio(v.getPrecio());
+                        m.setProvincia(v.getProvincia());
+                        m.setDireccion(v.getDireccion());
+                        m.setTipoVivienda(v.getTipoVivienda());
+                        m.setTienePiscina(v.isTienePiscina());
+                        m.setTieneAscensor(v.isTieneAscensor());
+                        m.setTieneGaraje(v.isTieneGaraje());
+                        viviendaService.save(m);
+
+                        return m;
+                    })
+            );
+        }
+    }
+
+    @Operation(summary = "Borra una vivienda por id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Se ha borrado la vivienda",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id, @AuthenticationPrincipal UserEntity userEntity) {
+
+        if (userEntity.getRoles().equals(UserRole.ADMIN) || viviendaService.findById(id).get().getPropietario().getId().equals(userEntity.getId())) {
+            viviendaService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+            return ResponseEntity.notFound().build();
+    }
+
+
+    /*public GetViviendaDto saveGetViviendaDto(CreateViviendaDto createViviendaDto, UserEntity user){
         GetViviendaDto getViviendaDto = GetViviendaDto.builder()
                 .titulo(createViviendaDto.getTitulo())
                 .descripcion(createViviendaDto.getDescripcion())
@@ -140,6 +205,6 @@ public class ViviendaController {
                 .build();
 
         return getViviendaDto;
-    }
+    }*/
 
 }

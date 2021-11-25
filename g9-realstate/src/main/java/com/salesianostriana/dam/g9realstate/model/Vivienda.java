@@ -47,8 +47,8 @@ public class Vivienda implements Serializable {
     @JoinColumn(name = "userEntity_id", foreignKey = @ForeignKey(name = "FK_VIVIENDA_USERENTITY"))
     private UserEntity propietario;
 
-    /*@Builder.Default
-    @OneToMany(mappedBy = "vivienda", cascade = {CascadeType.REMOVE})
+    @Builder.Default
+    @OneToMany(mappedBy = "vivienda")
     private List<Interesa> interesas = new ArrayList<>();
 
 
@@ -61,7 +61,7 @@ public class Vivienda implements Serializable {
     public void removeInmobiliaria(Inmobiliaria i){
         i.getViviendas().remove(this);
         this.inmobiliaria=null;
-    }*/
+    }
 
     public void addPropietario(UserEntity p){
         this.propietario = p;
@@ -73,33 +73,4 @@ public class Vivienda implements Serializable {
         this.propietario=null;
     }
 
-    public Vivienda(String titulo, String descripcion, String provincia, double precio, int numHabitaciones, int numBaños, double metrosCuadrados, String avatar) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.provincia = provincia;
-        this.precio = precio;
-        this.numHabitaciones = numHabitaciones;
-        this.numBanios = numBaños;
-        this.metrosCuadrados = metrosCuadrados;
-        this.avatar = avatar;
-    }
-
-    public Vivienda(String titulo, String descripcion, String avatar, String latlng, String direccion, String codigoPostal, String poblacion, String provincia, TipoVivienda tipoVivienda, double precio, int numHabitaciones, int numBanios, double metrosCuadrados, boolean tienePiscina, boolean tieneAscensor, boolean tieneGaraje) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.avatar = avatar;
-        this.latlng = latlng;
-        this.direccion = direccion;
-        this.codigoPostal = codigoPostal;
-        this.poblacion = poblacion;
-        this.provincia = provincia;
-        this.tipoVivienda = tipoVivienda;
-        this.precio = precio;
-        this.numHabitaciones = numHabitaciones;
-        this.numBanios = numBanios;
-        this.metrosCuadrados = metrosCuadrados;
-        this.tienePiscina = tienePiscina;
-        this.tieneAscensor = tieneAscensor;
-        this.tieneGaraje = tieneGaraje;
-    }
 }
