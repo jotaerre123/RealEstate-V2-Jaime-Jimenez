@@ -91,11 +91,10 @@ public class PropietarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePropietario(@PathVariable UUID id, @AuthenticationPrincipal UserEntity userEntity){
 
-        Optional<UserEntity> propietario = userEntityService.loadUserById(id);
 
 
-        if (propietario.isEmpty() && id.equals(userEntity.getId()) || userEntity.getRoles().equals(UserRole.ADMIN)) {
-            //duda: solo me deja si soy admin
+
+        if (id.equals(userEntity.getId()) || userEntity.getRoles().equals(UserRole.ADMIN)) {
             userEntityService.deleteById(id);
             return ResponseEntity.noContent().build();
 
