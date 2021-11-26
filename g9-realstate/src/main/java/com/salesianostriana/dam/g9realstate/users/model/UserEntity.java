@@ -16,7 +16,7 @@ import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Entity
+@Entity(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter@Setter
@@ -57,6 +57,7 @@ public class UserEntity implements UserDetails{
 
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private UserRole roles;
 
     @ManyToOne

@@ -1,1 +1,2 @@
 insert into Inmobiliaria (id, email, nombre, telefono) values (NEXTVAL('hibernate_sequence'), 'rclapton13@ocn.ne.jp', 'Abbott LLC', '242 661 3310');
+INSERT INTO USERS (id,nombre,apellidos,direccion,email,telefono,avatar,password,role) VALUES ('a7eb6f5a4e4811ec81d30242ac130003','Pablo','Segura Velasco','Calle Fantasia Final 14','pablo@gmail.com','654321789','aaa.jpg','$2a$12$bTLo5TQHwmFvt05aoTgd8ewxJnooX.f6UAdxk8ix1sqpyA4XaTsie','ADMIN')

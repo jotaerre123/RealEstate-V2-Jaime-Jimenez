@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.g9realstate.dto.vivienda;
 
+import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,24 @@ public class ViviendaDtoConverter {
         result.setTieneGaraje(v.isTieneGaraje());
         //result.setInmobiliaria(inmobiliariaService.findById(v.getInmobiliaria().getId()).get());
         result.setPropietario(user);
+
+        return result;
+    }
+
+    public GetViviendaInmobiliariaDto viviendaToGetViviendaInmobiliariaDto(Vivienda v, Inmobiliaria i){
+
+        GetViviendaInmobiliariaDto result = new GetViviendaInmobiliariaDto();
+        result.setPoblacion(v.getPoblacion());
+        result.setDireccion(v.getDireccion());
+        result.setProvincia(v.getProvincia());
+        result.setPrecio(v.getPrecio());
+        result.setAvatar(v.getAvatar());
+        result.setMetrosCuadrados(v.getMetrosCuadrados());
+        result.setNumHabitaciones(v.getNumHabitaciones());
+        result.setTipo(v.getTipoVivienda());
+        result.setTitulo(v.getTitulo());
+        result.setIdInmo(i.getId());
+        result.setNombreInmo(i.getNombre());
 
         return result;
     }
