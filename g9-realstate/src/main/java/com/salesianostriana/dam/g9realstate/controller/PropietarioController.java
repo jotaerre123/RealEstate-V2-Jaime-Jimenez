@@ -104,28 +104,7 @@ public class PropietarioController {
 
     }
 
-    /*@Operation(summary = "Crea un nuevo propietario")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "Se ha creado el propietario",
-                    content = { @Content(mediaType = "application/json")}),
-            @ApiResponse(responseCode = "400",
-                    description = "No se ha creado el propietario",
-                    content = @Content),
-    })
-    @PostMapping("")
-    public ResponseEntity<Propietario> create(@RequestBody CreatePropietarioDto dto){
-        if (dto.getNombre().isEmpty()){
-            return ResponseEntity.notFound().build();
-        }else {
 
-            Propietario nuevo = propietarioDtoConverter.createPropietarioDtoToPropietario(dto);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(propietarioService.save(nuevo));
-
-        }
-
-    }*/
 
 
 }

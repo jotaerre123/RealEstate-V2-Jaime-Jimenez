@@ -29,6 +29,7 @@ public class InmobiliariaDtoConverter {
                 .nombre(in.getNombre())
                 .email(in.getEmail())
                 .telefono(in.getTelefono())
+                .vivienda(nombreVivienda)
                 .build();
 
     }

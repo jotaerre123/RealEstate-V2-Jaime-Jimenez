@@ -1,9 +1,13 @@
 package com.salesianostriana.dam.g9realstate.dto.vivienda;
 
+import com.salesianostriana.dam.g9realstate.dto.inmobiliaria.GetInmobiliariaDto;
 import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class ViviendaDtoConverter {
@@ -65,6 +69,35 @@ public class ViviendaDtoConverter {
         result.setNombreInmo(i.getNombre());
 
         return result;
+    }
+
+    public GetViviendaInmobiliariaDto2 getVivienda(Vivienda v){
+
+
+
+        return GetViviendaInmobiliariaDto2
+                .builder()
+                .id(v.getId())
+                .titulo(v.getTitulo())
+                .nombrePropietario(v.getPropietario().getNombre())
+                .provincia(v.getProvincia())
+                .direccion(v.getDireccion())
+                .numBanios(v.getNumBanios())
+                .numHabitaciones(v.getNumHabitaciones())
+                .metrosCuadrados(v.getMetrosCuadrados())
+                .precio(v.getPrecio())
+                .descripcion(v.getDescripcion())
+                .avatar(v.getAvatar())
+                .tipo(v.getTipoVivienda())
+                .codigoPostal(v.getCodigoPostal())
+                .latlng(v.getLatlng())
+                .poblacion(v.getPoblacion())
+                .tienePiscina(v.isTienePiscina())
+                .tieneAscensor(v.isTieneAscensor())
+                .tieneGaraje(v.isTieneGaraje())
+                .nombrePropietario(v.getPropietario().getNombre())
+                .build();
+
     }
 
 }

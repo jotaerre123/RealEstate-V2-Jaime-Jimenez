@@ -15,5 +15,5 @@ import java.util.List;
 public class GetInmobiliariaDto {
     private Long id;
     private String nombre, email, telefono;
-    private Vivienda vivienda;
+    private List<String> vivienda;
 }

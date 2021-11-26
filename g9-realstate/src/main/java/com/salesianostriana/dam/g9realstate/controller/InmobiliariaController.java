@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,29 +44,72 @@ public class InmobiliariaController {
                 .body(inmobiliariaService.save(inmobiliaria));
 
     }
-
-    @Operation(summary = "Crea una inmobiliaria")
+    @Operation(summary = "Obtiene todos las inmobiliarias creadas")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204",
-                    description = "Se ha creado la inmobiliaria",
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado las inmobiliarias",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Inmobiliaria.class))}),
-            @ApiResponse(responseCode = "400",
-                    description = "No se ha guardado la inmobiliaria",
+            @ApiResponse(responseCode = "404",
+                    description = "No se han encontrado las inmobiliarias",
                     content = @Content),
     })
     @GetMapping("")
-    public ResponseEntity<List<GetInmobiliariaDto>>findAll(){
-        List<Inmobiliaria> data = inmobiliariaService.findAll();
-        if (data.isEmpty()){
+    public ResponseEntity<List<GetInmobiliariaDto>> findAll(){
+        List <Inmobiliaria> datos= inmobiliariaService.findAll();
+
+        if (datos.isEmpty()){
             return ResponseEntity.notFound().build();
-        }else{
-            List<GetInmobiliariaDto> lista = data.stream()
+        }else {
+            List<GetInmobiliariaDto> lista = datos.stream()
                     .map(inmobiliariaDtoConverter::getInmobiliariaToInmobiliariaDto)
                     .collect(Collectors.toList());
+
             return ResponseEntity.ok().body(lista);
         }
 
+    }
+    @Operation(summary = "Obtiene una inmobiliaria creada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado la inmobiliaria",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Inmobiliaria.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se han encontrado la inmobiliaria",
+                    content = @Content),
+    })
+    @GetMapping("{id}")
+    public ResponseEntity<List<GetInmobiliariaDto>> findOne (@PathVariable Long id){
+        Optional<Inmobiliaria> inmo = inmobiliariaService.findById(id);
+        if(inmobiliariaService.findById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        else{
+            List<GetInmobiliariaDto> inmobiliariaDTO= inmo.stream()
+                    .map(inmobiliariaDtoConverter::getInmobiliariaToInmobiliariaDto)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok().body(inmobiliariaDTO);
+        }
+    }
+
+    @Operation(summary = "Borra una inmobiliaria creada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Se ha borrado la inmobiliaria",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Inmobiliaria.class))})
+    })
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<GetInmobiliariaDto> borrarInmobiliaria(@PathVariable Long id){
+
+        if(inmobiliariaService.findById(id).isEmpty() ){
+            return ResponseEntity.notFound().build();
+        }else {
+            inmobiliariaService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
     }
 
 
