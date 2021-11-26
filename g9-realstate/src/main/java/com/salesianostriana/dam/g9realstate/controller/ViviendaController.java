@@ -3,9 +3,12 @@ package com.salesianostriana.dam.g9realstate.controller;
 
 import com.salesianostriana.dam.g9realstate.dto.vivienda.CreateViviendaDto;
 import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaDto;
+import com.salesianostriana.dam.g9realstate.dto.vivienda.GetViviendaInmobiliariaDto;
 import com.salesianostriana.dam.g9realstate.dto.vivienda.ViviendaDtoConverter;
+import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
 
+import com.salesianostriana.dam.g9realstate.service.InmobiliariaService;
 import com.salesianostriana.dam.g9realstate.service.ViviendaService;
 
 import com.salesianostriana.dam.g9realstate.users.dto.UserDtoConverter;
@@ -36,7 +39,7 @@ public class ViviendaController {
 
 
     private final ViviendaService viviendaService;
-
+    private final InmobiliariaService inmobiliariaService;
     private final ViviendaDtoConverter viviendaDtoConverter;
     private final UserDtoConverter userDtoConverter;
 
@@ -176,6 +179,7 @@ public class ViviendaController {
     public ResponseEntity<?> delete(@PathVariable Long id, @AuthenticationPrincipal UserEntity userEntity) {
 
         if (userEntity.getRoles().equals(UserRole.ADMIN) || viviendaService.findById(id).get().getPropietario().getId().equals(userEntity.getId())) {
+            viviendaService.findById(id).get().removeInteresasFromVivienda();
             viviendaService.deleteById(id);
             return ResponseEntity.noContent().build();
         }
@@ -197,6 +201,34 @@ public class ViviendaController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(list);
+    }
+
+    @Operation(summary = "Crea una nueva Inmobiliaria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha creado la inmobiliaria",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha creado la inmobiliaria",
+                    content = @Content),
+    })
+    @PostMapping("/{id}/inmobiliaria/{id2}")
+    public ResponseEntity<?> asociarInmobiliariaAVivienda(@PathVariable Long id, @PathVariable Long id2, UserEntity userEntity){
+        if(viviendaService.findById(id).isPresent() && inmobiliariaService.findById(id2).isPresent()
+        && viviendaService.findById(id).get().getPropietario().getId().equals(userEntity.getId()) ||
+        userEntity.getRoles().equals(UserRole.ADMIN)){
+             Vivienda vivienda = viviendaService.findById(id).get();
+             Inmobiliaria inmobiliaria = inmobiliariaService.findById(id2).get();
+             vivienda.setInmobiliaria(inmobiliaria);
+             vivienda.addInmobiliaria(inmobiliaria);
+             viviendaService.save(vivienda);
+            GetViviendaInmobiliariaDto getViviendaInmobiliariaDto = viviendaDtoConverter.viviendaToGetViviendaInmobiliariaDto(vivienda, inmobiliaria);
+            return ResponseEntity.status(HttpStatus.CREATED).body(getViviendaInmobiliariaDto);
+
+        }else {
+            return  ResponseEntity.notFound().build();
+        }
     }
 
 

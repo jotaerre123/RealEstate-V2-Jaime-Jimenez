@@ -51,10 +51,16 @@ public class Vivienda implements Serializable {
     @OneToMany(mappedBy = "vivienda")
     private List<Interesa> interesas = new ArrayList<>();
 
-
+    @PreRemove
+    public void removeInteresasFromVivienda(){
+        interesas.forEach(interesa -> interesa.setVivienda(null));
+    }
 
     public void addInmobiliaria(Inmobiliaria i){
         this.inmobiliaria = i;
+        if (i.getViviendas() == null){
+            i.setViviendas(new ArrayList<>());
+        }
         i.getViviendas().add(this);
     }
 
