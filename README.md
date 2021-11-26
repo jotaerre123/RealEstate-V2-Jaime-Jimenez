@@ -44,11 +44,14 @@
 
 </br>
 
-## <p>Funcionalidades de Propietario:</p> ##
+## <p>Funcionalidades de UserEntity:</p> ##
 
 #### Asociación @OneToMany hacia Vivienda, además es hija de (extiende a) *Persona* 
 
-* Crear un nuevo propietario(esto se hará para la parte del formulario de Vivienda en la parte *Fronted*)
+* Crear un nuevo usuario PROPIETARIO.
+* Crear un nuevo usuario GESTOR.
+* Crear un nuevo usuario ADMIN.
+* Hacer login con cualquiera de los usuarios creados a través del email
 * Ver todos los propietarios existentes
 * Mostrar todos los datos de un propietario
 *  Borrar un propietario y además las viviendas que tiene asociadas
@@ -56,17 +59,10 @@
 
 ## <p>Funcionalidades de Interesado-Interesa:</p> ##
 
-#### *Interesado*: Asociación @OneToMany hacia Vivienda, además es hija de (extiende a) *Persona*
-
 #### *Interesa*: @ManyToOne hacia Vivienda
-#### *Interesa*: @ManyToOne hacia Interesado
 
-
-* Crear un nuevo interesado, que se interese por una vivienda concreta
-* Crear un nuevo interés para una vivienda concreta, por parte de un interesado ya existente
-* Eliminar el interés de un interesado por una vivienda concreta
-* Obtener todos los Interesados
-* Mostrar todos los datos de un interesado
+* Crear un nuevo interés por una vivienda concreta
+* Eliminar el interés por una vivienda concreta
 * Obtener las 10 viviendas por las que se hayan interesado
 </br> 
 
