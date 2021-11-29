@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.g9realstate.controller;
 
 
+import com.salesianostriana.dam.g9realstate.dto.propietario.GetPropietarioViviendaDto;
 import com.salesianostriana.dam.g9realstate.dto.vivienda.*;
 import com.salesianostriana.dam.g9realstate.model.Inmobiliaria;
 import com.salesianostriana.dam.g9realstate.model.Vivienda;
@@ -12,6 +13,7 @@ import com.salesianostriana.dam.g9realstate.users.dto.UserDtoConverter;
 import com.salesianostriana.dam.g9realstate.users.model.UserEntity;
 import com.salesianostriana.dam.g9realstate.users.model.UserRole;
 
+import com.salesianostriana.dam.g9realstate.users.services.UserEntityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,6 +41,7 @@ public class ViviendaController {
     private final InmobiliariaService inmobiliariaService;
     private final ViviendaDtoConverter viviendaDtoConverter;
     private final UserDtoConverter userDtoConverter;
+    private final UserEntityService userEntityService;
 
     @Operation(summary = "Crea una nueva vivienda")
     @ApiResponses(value = {
@@ -78,16 +81,18 @@ public class ViviendaController {
                     content = @Content),
     })
     @GetMapping("")
-    public ResponseEntity<List<GetViviendaInmobiliariaDto2>> findAll() {
+    public ResponseEntity<List<GetPropietarioViviendaDto>> findAll(@AuthenticationPrincipal UserEntity userEntity) {
+
+        Optional<UserEntity> user = userEntityService.loadUserById(userEntity.getId());
 
         List<Vivienda> data = viviendaService.listarViviendasDto();
 
-        if (data.isEmpty()) {
-            return ResponseEntity.notFound().build();
+        if (data.isEmpty() || !userEntity.getRoles().equals(UserRole.PROPIETARIO) ) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } else {
 
-                List<GetViviendaInmobiliariaDto2> lista = data.stream()
-                        .map(viviendaDtoConverter::getVivienda).collect(Collectors.toList());
+                List<GetPropietarioViviendaDto> lista = user.stream()
+                        .map(userDtoConverter::viviendaPropietarioDto).collect(Collectors.toList());
             return ResponseEntity.ok(lista);
         }
     }

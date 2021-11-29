@@ -18,4 +18,6 @@ public interface ViviendaRepository extends JpaRepository<Vivienda, Long> {
             """, nativeQuery = true)
     List<Vivienda> top5ViviendasInteresas();
 
+
+
 }
