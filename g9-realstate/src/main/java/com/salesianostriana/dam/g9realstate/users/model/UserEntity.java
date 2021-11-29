@@ -65,7 +65,7 @@ public class UserEntity implements UserDetails{
     private Inmobiliaria inmobiliaria;
 
     @Builder.Default
-    @OneToMany(mappedBy = "propietario", fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "propietario", fetch = FetchType.EAGER,cascade = {CascadeType.REMOVE}, orphanRemoval = true) // TODO ¿Por qué era necesario usar EAGER?
     @JsonIgnore
     private List<Vivienda> listaViviendas = new ArrayList<>();
 

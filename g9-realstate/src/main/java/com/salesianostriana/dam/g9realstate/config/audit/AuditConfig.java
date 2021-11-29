@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
-public class AuditConfig {
+public class AuditConfig { // TODO ¿Para qué está este BEAN si no se utiliza?
 
     @Bean
     public SpringSecurityAuditorAware auditorProvider() {

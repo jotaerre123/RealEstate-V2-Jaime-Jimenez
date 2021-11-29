@@ -40,7 +40,7 @@ public class PropietarioController {
                     content = @Content),
     })
     @GetMapping("/")
-    public ResponseEntity<List<UserEntity>> findAll(){
+    public ResponseEntity<List<UserEntity>> findAll(){ // TODO El modelo de respuesta de esta petición no es nada adecuado. Aparecen los roles, la contraseña cifrado, ....
         List<UserEntity> data = userEntityService.loadUserByRole(UserRole.PROPIETARIO);
 
         if (data.isEmpty()){
@@ -95,7 +95,7 @@ public class PropietarioController {
 
 
         if (id.equals(userEntity.getId()) || userEntity.getRoles().equals(UserRole.ADMIN)) {
-            userEntityService.deleteById(id);
+            userEntityService.deleteById(id); // TODO Produce una excepción si el ID no existe.
             return ResponseEntity.noContent().build();
 
         }

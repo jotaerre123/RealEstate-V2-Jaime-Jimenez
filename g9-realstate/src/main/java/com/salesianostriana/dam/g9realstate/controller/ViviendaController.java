@@ -104,7 +104,7 @@ public class ViviendaController {
     })
     @GetMapping("{id}")
     public ResponseEntity<Optional<Vivienda>> findOne (@PathVariable Long id) {
-
+        // TODO Se puede resumir con el uso de ResponseEntity.of
         Optional<Vivienda> data = viviendaService.findOne(id);
 
         if (data == null) {
@@ -257,7 +257,7 @@ public class ViviendaController {
 
     }
 
-
+    // TODO ¿Este método no podría estar en una de las clases DTO converter?
     public GetViviendaDto guardarGetViviendaDto(CreateViviendaDto createViviendaDto, UserEntity user){
         GetViviendaDto getViviendaDto = GetViviendaDto.builder()
                 .titulo(createViviendaDto.getTitulo())
