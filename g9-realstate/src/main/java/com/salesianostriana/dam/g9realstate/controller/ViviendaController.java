@@ -80,8 +80,33 @@ public class ViviendaController {
                     description = "No se han encontrado las viviendas",
                     content = @Content),
     })
-    @GetMapping("")
-    public ResponseEntity<List<GetPropietarioViviendaDto>> findAll(@AuthenticationPrincipal UserEntity userEntity) {
+    @GetMapping("/propietario")
+    public ResponseEntity<List<Vivienda>> findAllPropietario(@AuthenticationPrincipal UserEntity userEntity) {
+
+
+
+        List<Vivienda> data = viviendaService.propietariVivienda(userEntity.getId());
+
+        if (data.isEmpty() || !userEntity.getRoles().equals(UserRole.PROPIETARIO) ) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else {
+
+            return ResponseEntity.ok(data);
+        }
+    }
+
+    /*@Operation(summary = "Obtiene lista de viviendas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado lista de viviendas",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se han encontrado las viviendas",
+                    content = @Content),
+    })
+    @GetMapping("/")
+    public ResponseEntity<List<Get>> findAll(@AuthenticationPrincipal UserEntity userEntity) {
 
         Optional<UserEntity> user = userEntityService.loadUserById(userEntity.getId());
 
@@ -91,11 +116,11 @@ public class ViviendaController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } else {
 
-                List<GetPropietarioViviendaDto> lista = user.stream()
-                        .map(userDtoConverter::viviendaPropietarioDto).collect(Collectors.toList());
+            List<GetPropietarioViviendaDto> lista = user.stream()
+                    .map(userDtoConverter::viviendaPropietarioDto).collect(Collectors.toList());
             return ResponseEntity.ok(lista);
         }
-    }
+    }*/
 
     @Operation(summary = "Obtiene una vivienda en base a su ID")
     @ApiResponses(value = {

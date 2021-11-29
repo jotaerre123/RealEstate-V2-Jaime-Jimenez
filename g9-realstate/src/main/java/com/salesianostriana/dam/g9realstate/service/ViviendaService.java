@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ViviendaService extends BaseService<Vivienda, Long, ViviendaRepository> {
@@ -25,6 +26,9 @@ public class ViviendaService extends BaseService<Vivienda, Long, ViviendaReposit
         return repositorio.top5ViviendasInteresas();
     }
 
+    public List<Vivienda> propietariVivienda(UUID id){
+        return repositorio.viviendasDePropietario(id);
+    }
 
     public Vivienda saveViviendaFromGetViviendaDto(GetViviendaDto getViviendaDto, UserEntity userEntity){
        Vivienda vivienda = Vivienda.builder()

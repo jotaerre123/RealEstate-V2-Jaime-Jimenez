@@ -43,6 +43,8 @@ public class Vivienda implements Serializable {
     @JoinColumn(name = "inmobiliaria", foreignKey = @ForeignKey(name = "FK_VIVIENDA_INMOBILIARIA"), nullable = true)
     private Inmobiliaria inmobiliaria;
 
+
+
     @ManyToOne
     @JoinColumn(name = "userEntity_id", foreignKey = @ForeignKey(name = "FK_VIVIENDA_USERENTITY"))
     private UserEntity propietario;
@@ -117,5 +119,26 @@ public class Vivienda implements Serializable {
         this.tieneAscensor = tieneAscensor;
         this.tieneGaraje = tieneGaraje;
         this.inmobiliaria = inmobiliaria;
+    }
+    public Vivienda(Long id, String titulo, String descripcion, String avatar, String latlng, String direccion, String codigoPostal, String poblacion, String provincia, TipoVivienda tipoVivienda, double precio, int numHabitaciones, int numBanios, double metrosCuadrados, boolean tienePiscina, boolean tieneAscensor, boolean tieneGaraje, Inmobiliaria inmobiliaria, UserEntity propietario) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.avatar = avatar;
+        this.latlng = latlng;
+        this.direccion = direccion;
+        this.codigoPostal = codigoPostal;
+        this.poblacion = poblacion;
+        this.provincia = provincia;
+        this.tipoVivienda = tipoVivienda;
+        this.precio = precio;
+        this.numHabitaciones = numHabitaciones;
+        this.numBanios = numBanios;
+        this.metrosCuadrados = metrosCuadrados;
+        this.tienePiscina = tienePiscina;
+        this.tieneAscensor = tieneAscensor;
+        this.tieneGaraje = tieneGaraje;
+        this.inmobiliaria = inmobiliaria;
+        this.propietario = propietario;
     }
 }
