@@ -81,7 +81,7 @@ public class ViviendaController {
                     content = @Content),
     })
     @GetMapping("/propietario")
-    public ResponseEntity<List<Vivienda>> findAllPropietario(@AuthenticationPrincipal UserEntity userEntity) {
+    public ResponseEntity<List<GetViviendaInmobiliariaDto2>> findAllPropietario(@AuthenticationPrincipal UserEntity userEntity) {
 
 
 
@@ -91,7 +91,11 @@ public class ViviendaController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } else {
 
-            return ResponseEntity.ok(data);
+            List<GetViviendaInmobiliariaDto2> lista = data.stream()
+                    .map(viviendaDtoConverter::getVivienda)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(lista);
         }
     }
 

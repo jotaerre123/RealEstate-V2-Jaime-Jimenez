@@ -27,7 +27,7 @@ public class ViviendaService extends BaseService<Vivienda, Long, ViviendaReposit
     }
 
     public List<Vivienda> propietariVivienda(UUID id){
-        return repositorio.viviendasDePropietario(id);
+        return repositorio.findViviendaByPropietarioId(id);
     }
 
     public Vivienda saveViviendaFromGetViviendaDto(GetViviendaDto getViviendaDto, UserEntity userEntity){

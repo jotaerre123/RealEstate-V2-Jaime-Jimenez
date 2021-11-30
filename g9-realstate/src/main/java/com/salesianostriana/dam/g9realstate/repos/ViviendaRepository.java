@@ -19,10 +19,7 @@ public interface ViviendaRepository extends JpaRepository<Vivienda, Long> {
             """, nativeQuery = true)
     List<Vivienda> top5ViviendasInteresas();
 
-    @Query(value = """
-            SELECT * FROM Vivienda v
-            WHERE v.propietario.id = id
-            """, nativeQuery = true)
-    List<Vivienda> viviendasDePropietario(UUID id);
+
+    List<Vivienda> findViviendaByPropietarioId(UUID id);
 
 }
